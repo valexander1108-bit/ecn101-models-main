@@ -1,0 +1,14 @@
+.DS_Store
+.vscode/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.streamlit/
+dist/
+build/
+data/*
+!data/.gitkeep
