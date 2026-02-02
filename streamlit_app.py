@@ -1,6 +1,4 @@
 # --- NAV & ROUTER (replace your current block with this) ---
-import importlib.util
-from pathlib import Path
 import streamlit as st
 
 options = [
@@ -54,6 +52,7 @@ MODULES = {
         "Mundell–Fleming",
         "Fiscal Multipliers",
         "HANK",
+        "Phillips Curve",
     ],
 }
 # flat list if you ever need it
@@ -88,22 +87,6 @@ st.session_state.pop("nav_default", None)
 
 # consume the default so it doesn't stick
 st.session_state.pop("nav_default", None)
-
-def run_app_from_file(rel_path, module_name, label):
-    file_path = Path(__file__).resolve().parent / rel_path
-    if not file_path.exists():
-        st.error(f"{label} file not found: {rel_path}")
-        return
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    if spec is None or spec.loader is None:
-        st.error(f"Unable to load {label} module from {rel_path}")
-        return
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    if hasattr(mod, "app"):
-        mod.app()
-    else:
-        st.error(f"{label} module is missing an app() entry point.")
 
 if page == "Budget Constraint":
     from apps.budget_line import app as budget_app; budget_app()
@@ -144,16 +127,18 @@ elif page == "Labor + Wage":
 elif page == "Capital + Interest":
     from apps.capital import app as cap_app; cap_app()
 elif page == "IS–LM":
-    run_app_from_file("apps/IS-LM.py", "apps.is_lm_file", "IS–LM")
+    from apps.is_lm import app as islm_app; islm_app()
 elif page == "AD–AS":
-    run_app_from_file("apps/ad_as.py", "apps.ad_as", "AD–AS")
+    from apps.ad_as import app as adas_app; adas_app()
 elif page == "Solow Model":
-    run_app_from_file("apps/solow_model.py", "apps.solow_model", "Solow Model")
+    from apps.solow_model import app as solow_app; solow_app()
 elif page == "NK DSGE":
-    run_app_from_file("apps/nk_dsge", "apps.nk_dsge_file", "NK DSGE")
+    from apps.nk_dsge import app as nk_app; nk_app()
 elif page == "Mundell–Fleming":
-    run_app_from_file("apps/Mundell_Fleming.py", "apps.mundell_fleming_file", "Mundell–Fleming")
+    from apps.mundell_fleming import app as mf_app; mf_app()
 elif page == "Fiscal Multipliers":
-    run_app_from_file("apps/Fiscal_Multipliers.py", "apps.fiscal_multipliers_file", "Fiscal Multipliers")
+    from apps.fiscal_multipliers import app as fm_app; fm_app()
 elif page == "HANK":
-    run_app_from_file("apps/hank_teaser.py", "apps.hank_teaser", "HANK")
+    from apps.hank_teaser import app as hank_app; hank_app()
+elif page == "Phillips Curve":
+    from apps.phillips_curve import app as pc_app; pc_app()
